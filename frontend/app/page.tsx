@@ -1,23 +1,29 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-import SearchBar from "../components/SearchBar";
-import { searchMovie } from "../services/api";
+import Navbar from "@/components/layout/Navbar";
+import Hero from "@/components/home/Hero";
+import SearchBar from "@/components/search/SearchBar";
+import TrendingSection from "@/components/home/TrendingSection";
+
+import { searchMovie } from "@/services/api";
 
 export default function Home() {
-  const [movie, setMovie] = useState<any>(null);
+  const router = useRouter();
+
   const [loading, setLoading] = useState(false);
 
   async function handleSearch(query: string) {
     try {
       setLoading(true);
 
-      const data = await searchMovie(query);
+      const movie = await searchMovie(query);
 
-      setMovie(data);
-    } catch (error) {
-      console.error(error);
+      router.push(`/movie/${movie.id}`);
+    } catch (err) {
+      console.error(err);
       alert("Movie not found.");
     } finally {
       setLoading(false);
@@ -25,56 +31,22 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-100 flex flex-col items-center p-10">
+    <main className="min-h-screen bg-slate-950 text-white">
+      <Navbar />
 
-      <h1 className="text-5xl font-bold mb-4">
-        🎬 CineVerse AI
-      </h1>
+      <Hero />
 
-      <p className="mb-8 text-gray-600">
-        Explore Movies, TV Shows & Characters
-      </p>
-
-      <SearchBar onSearch={handleSearch} />
+      <section className="mx-auto max-w-3xl px-6">
+        <SearchBar onSearch={handleSearch} />
+      </section>
 
       {loading && (
-        <p className="mt-8">Loading...</p>
+        <p className="mt-8 text-center text-slate-400">
+          Searching...
+        </p>
       )}
 
-      {movie && (
-
-        <div className="mt-10 bg-white rounded-xl shadow-lg p-6 w-full max-w-3xl">
-
-          {movie.poster && (
-
-            <img
-              src={movie.poster}
-              alt={movie.title}
-              className="w-60 rounded-lg mb-6"
-            />
-
-          )}
-
-          <h2 className="text-3xl font-bold">
-            {movie.title}
-          </h2>
-
-          <p className="mt-3">
-            ⭐ {movie.rating}
-          </p>
-
-          <p className="mt-2">
-            📅 {movie.release_date}
-          </p>
-
-          <p className="mt-6">
-            {movie.overview}
-          </p>
-
-        </div>
-
-      )}
-
+      <TrendingSection />
     </main>
   );
 }
