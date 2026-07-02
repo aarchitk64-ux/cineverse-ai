@@ -1,47 +1,73 @@
-const API_BASE_URL = "http://127.0.0.1:8000";
+import type {
+  Movie,
+  MovieDetails,
+  Character,
+} from "@/types/movie";
 
-export async function searchMovie(query: string) {
-  const response = await fetch(
-    `${API_BASE_URL}/movie/${encodeURIComponent(query)}`
-  );
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
+async function fetchData<T>(endpoint: string): Promise<T> {
+  const response = await fetch(`${API_BASE_URL}${endpoint}`);
 
   if (!response.ok) {
-    throw new Error("Failed to fetch movie.");
+    throw new Error(`API Error (${response.status})`);
   }
 
-  return response.json();
+  return response.json() as Promise<T>;
 }
 
-export async function getTrendingMovies() {
-  const response = await fetch(
-    `${API_BASE_URL}/trending`
-  );
-
-  if (!response.ok) {
-    throw new Error("Failed to load trending movies.");
-  }
-
-  return response.json();
+interface CharacterAnalysisResponse {
+  character: {
+    actor_name: string;
+    character_name: string;
+    movie_title: string;
+    profile: string | null;
+  };
+  analysis: {
+    background: string;
+    personality: string;
+    motivations: string;
+    relationships: string;
+    timeline: string;
+    strengths: string;
+    weaknesses: string;
+  };
 }
-export async function getMovieDetails(movieId: number) {
-  const response = await fetch(
-    `${API_BASE_URL}/details/${movieId}`
+
+export async function searchMovie(
+  query: string
+): Promise<Movie> {
+  return fetchData<Movie>(
+    `/movie/${encodeURIComponent(query)}`
   );
-
-  if (!response.ok) {
-    throw new Error("Failed to load movie details.");
-  }
-
-  return response.json();
 }
-export async function getMovieCast(movieId: number) {
-  const response = await fetch(
-    `${API_BASE_URL}/cast/${movieId}`
+
+export async function getTrendingMovies(): Promise<Movie[]> {
+  return fetchData<Movie[]>("/trending");
+}
+
+export async function getMovieDetails(
+  movieId: number
+): Promise<MovieDetails> {
+  return fetchData<MovieDetails>(
+    `/details/${movieId}`
   );
+}
 
-  if (!response.ok) {
-    throw new Error("Failed to load cast.");
-  }
+export async function getMovieCast(
+  movieId: number
+): Promise<Character[]> {
+  return fetchData<Character[]>(
+    `/cast/${movieId}`
+  );
+}
 
-  return response.json();
+export async function getCharacterAnalysis(
+  movieId: number,
+  personId: number
+): Promise<CharacterAnalysisResponse> {
+  return fetchData<CharacterAnalysisResponse>(
+    `/character/${movieId}/${personId}`
+  );
 }

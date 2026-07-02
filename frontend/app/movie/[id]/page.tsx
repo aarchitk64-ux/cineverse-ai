@@ -24,7 +24,7 @@ export default async function MoviePage({
 
       {movie.backdrop && (
         <div
-          className="relative h-[420px] bg-cover bg-center"
+          className="relative h-[500px] bg-cover bg-center"
           style={{
             backgroundImage: `url(${movie.backdrop})`,
           }}
@@ -33,58 +33,59 @@ export default async function MoviePage({
         </div>
       )}
 
-      {/* Movie Information */}
+      {/* Movie Info */}
 
-      <section className="mx-auto -mt-48 max-w-7xl px-8 relative z-10">
+      <section className="relative z-10 mx-auto -mt-52 max-w-7xl px-8">
 
-        <div className="flex flex-col gap-10 lg:flex-row">
+        <div className="flex flex-col gap-12 lg:flex-row">
 
-          {movie.poster && (
-            <Image
-              src={movie.poster}
-              alt={movie.title}
-              width={340}
-              height={500}
-              loading="eager"
-              className="rounded-2xl shadow-2xl"
-            />
-          )}
+          <Image
+            src={movie.poster}
+            alt={movie.title}
+            width={350}
+            height={520}
+            priority
+            className="rounded-2xl shadow-2xl"
+          />
 
           <div className="flex-1">
 
-            <h1 className="text-5xl font-black">
+            <h1 className="text-6xl font-black">
               {movie.title}
             </h1>
 
-            <p className="mt-4 text-xl text-yellow-400">
-              ⭐ {movie.rating.toFixed(1)}
-            </p>
+            <div className="mt-6 flex flex-wrap gap-4">
 
-            <p className="mt-2 text-slate-400">
-              📅 {movie.release_date}
-            </p>
+              <span className="rounded-xl bg-red-600 px-4 py-2">
+                ⭐ {movie.rating.toFixed(1)}
+              </span>
 
-            <p className="mt-8 max-w-4xl leading-8 text-slate-300">
-              {movie.overview}
-            </p>
+              <span className="rounded-xl bg-slate-800 px-4 py-2">
+                📅 {movie.release_date}
+              </span>
 
-            <div className="mt-10 flex flex-wrap gap-6">
-
-              <div className="rounded-xl bg-slate-900 px-5 py-3">
-                <span className="font-semibold">
-                  Runtime:
-                </span>{" "}
-                {movie.runtime} min
-              </div>
-
-              <div className="rounded-xl bg-slate-900 px-5 py-3">
-                <span className="font-semibold">
-                  Genres:
-                </span>{" "}
-                {movie.genres.join(", ")}
-              </div>
+              <span className="rounded-xl bg-slate-800 px-4 py-2">
+                ⏱ {movie.runtime} min
+              </span>
 
             </div>
+
+            <div className="mt-6 flex flex-wrap gap-3">
+
+              {movie.genres.map((genre: string) => (
+                <span
+                  key={genre}
+                  className="rounded-full border border-slate-700 px-4 py-2 text-sm"
+                >
+                  {genre}
+                </span>
+              ))}
+
+            </div>
+
+            <p className="mt-8 max-w-4xl text-lg leading-8 text-slate-300">
+              {movie.overview}
+            </p>
 
           </div>
 
@@ -94,17 +95,26 @@ export default async function MoviePage({
 
       {/* Characters */}
 
-      <section className="mx-auto mt-24 max-w-7xl px-8">
+      <section className="mx-auto mt-28 max-w-7xl px-8 pb-20">
 
-        <h2 className="mb-10 text-4xl font-black">
-          🎭 Characters
-        </h2>
+        <div className="mb-10">
+
+          <h2 className="text-4xl font-black">
+            🎭 Main Characters
+          </h2>
+
+          <p className="mt-2 text-slate-400">
+            Click on any character to unlock AI analysis.
+          </p>
+
+        </div>
 
         <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-5">
 
           {cast.map((character: any) => (
             <CharacterCard
               key={character.id}
+              movieId={Number(id)}
               character={character}
             />
           ))}

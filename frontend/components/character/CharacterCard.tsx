@@ -6,15 +6,16 @@ import Link from "next/link";
 import { Character } from "@/types/movie";
 
 interface CharacterCardProps {
+  movieId: number;
   character: Character;
 }
 
 export default function CharacterCard({
+  movieId,
   character,
 }: CharacterCardProps) {
   return (
-    <Link href={`/character/${character.id}`}>
-
+    <Link href={`/character/${movieId}/${character.id}`}>
       <div className="group cursor-pointer overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 transition duration-300 hover:-translate-y-2 hover:border-red-500">
 
         {character.profile ? (
@@ -48,7 +49,6 @@ export default function CharacterCard({
         </div>
 
       </div>
-
     </Link>
   );
 }
