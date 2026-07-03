@@ -38,7 +38,7 @@ export default function ChatBox({
  const welcomeMessage: ChatMessageType = {
   id: crypto.randomUUID(),
   role: "assistant",
-  content: `Hello! I am ${characterName}. Feel free to ask me anything about my story, relationships, motivations, adventures, or the world I live in.`,
+  content: `Hello! Feel free to ask me anything about my story, relationships, motivations, adventures, or the world I live in.`,
   timestamp: new Date().toISOString(),
 };
   const [messages, setMessages] = useState<ChatMessageType[]>([

@@ -16,7 +16,7 @@ export default async function ChatPage({
     Number(movieId),
     Number(personId)
   );
-
+      console.log("Character:", data.character);
   return (
     <main className="min-h-screen bg-slate-950 text-white">
       <section className="mx-auto max-w-7xl px-8 py-20">
