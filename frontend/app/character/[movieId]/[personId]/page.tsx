@@ -23,9 +23,8 @@ export default async function ChatPage({
         </div>
 
         <ChatBox
-          movieId={Number(movieId)}
-          personId={Number(personId)}
-        />
+                  movieId={Number(movieId)}
+                  personId={Number(personId)} characterName={""}        />
       </section>
     </main>
   );
